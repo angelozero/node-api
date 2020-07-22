@@ -68,7 +68,7 @@
 *```"allowJs": true```: para incluir arquivos de configuração se o formato deste arquivo for .js*
 
 ---    
-> ### Padrão de JavaScript e usando ESLint
+### Padrão de JavaScript e usando ESLint
 
 * Estou seguindo o padrão chamado [JavaScript Standard Style](https://standardjs.com/rules.html)
 
@@ -98,7 +98,7 @@
 ```
 
 ---  
-### Adicionando biblioteca de teste
+### Adicionando biblioteca de teste - Jest
 
 * Usando o [Jest](https://jestjs.io/docs/en/getting-started). Para instalar execute o comando ```npm install -D jest @types/jest ts-jest```. O ```@types/jest``` é uma biblioteca de tipagem do Jest para o TypeScript e o comando ```ts-jest``` que é uma biblioteca para fazer uma compilação do código typescript para javascript somente para o jest.
 
