@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/angelozero/node-api/issues"
   },
-  "homepage": "https://github.com/angelozero/node-api#readme"
+  "homepage": "https://github.com/angelozero/node-api#readme",
+  "dependencies": {
+    "git-commit-msg-linter": "^2.4.4"
+  }
 }
