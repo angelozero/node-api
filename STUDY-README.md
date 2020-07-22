@@ -67,3 +67,8 @@
 * Estou seguindo o padrão chamado [JavaScript Standard Style](https://standardjs.com/rules.html)
 
 * Acesse os links para usar o [ESLint](https://eslint.org/docs/user-guide/getting-started) e instalar o [eslint-config-standard-with-typescript](https://www.npmjs.com/package/eslint-config-standard-with-typescript)
+
+
+> ###Adicionando Husky e Lint Staged
+
+* Adicionando a lib [husky](https://www.npmjs.com/package/husky) para previnir *git commit / push / ...* errados ou mal formatados. Apos intalado criei um arquivo chamado ```.huskyrc.json```. Este arquivo vai ser lido sempre antes de qualquer ```pre-commit```. Isso em um projeto com uma grande demanda de arquivos pode gerar lentidando devido a verificação de cada arquivo que o eslint esta fazendo. Para resolver este problema vou usar em conjunto com o husky a biblioteca [lint-staged](https://www.npmjs.com/package/lint-staged). Com esta lib consigo fazer o eslint rodar apenas nos arquivos que estao na *staged area*. *Staged area* são os arquivos que vão entrar no próximo *commit*. Resumidamente, apenas sera executado o eslint nos arquivos que foram modificados e estao indo para o *commit*.
