@@ -1,8 +1,6 @@
 > ## 01 - Configurando o ambiente
 
----
-
-### IMPORTANTE:
+##### IMPORTANTE:
 - *A versão mais nova do lint-staged (v10.0.0) não aceita mais que utilize o git add no fim do script. Ele já faz isso automaticamente. Basta remover do array de scripts do .lintstagedrc.json a linha do "git add".*
 - *A biblioteca eslint-config-standard-with-typescript deve ser usada com a versão ^16.0.0. Versões mais recentes dessa biblioteca estão dando conflito com o eslint.*
 - *A biblioteca @typescript-eslint/eslint-plugin deve ser usada na versão ^2.33.0.*
