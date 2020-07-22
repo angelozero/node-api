@@ -1,0 +1,19 @@
+{
+  "name": "angelo.zero.node.api",
+  "version": "1.0.0",
+  "description": "> ## APIs construídas no treinamento",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelozero/node-api.git"
+  },
+  "author": "Angelo Zero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angelozero/node-api/issues"
+  },
+  "homepage": "https://github.com/angelozero/node-api#readme"
+}
