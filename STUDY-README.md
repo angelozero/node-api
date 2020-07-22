@@ -8,7 +8,7 @@
 - *A biblioteca @typescript-eslint/eslint-plugin deve ser usada na versão ^2.33.0.*
 
 ---  
-
+<br />
 > ### Configurando o Git
 
 * Configurando atalhos para uso do git ( se caso houver problemas em acessar o visual code através do comando ```git config --global --edit``` acesse este [link](https://stackoverflow.com/questions/53847777/associating-visual-studio-code-with-git-in-mac))
@@ -22,7 +22,7 @@
 	log = !git log --pretty=format:'%C(yellow)%h%C(red)%d %C(white)%s - %C(cyan)%cn, %C(green)%cr'
 ```
   
-
+<br />
 > ### Padronizando as mensagens dos *commits*
 
 * Para padrão de *commits* estou usando o [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
