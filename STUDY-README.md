@@ -1,4 +1,4 @@
-> ## 01 - Configurando o ambiente
+# 01 - Configurando o ambiente
 
 ##### IMPORTANTE:
 - *A versão mais nova do lint-staged (v10.0.0) não aceita mais que utilize o git add no fim do script. Ele já faz isso automaticamente. Basta remover do array de scripts do .lintstagedrc.json a linha do "git add".*
@@ -103,3 +103,5 @@
 * Usando o [Jest](https://jestjs.io/docs/en/getting-started). Para instalar execute o comando ```npm install -D jest @types/jest ts-jest```. O ```@types/jest``` é uma biblioteca de tipagem do Jest para o TypeScript e o comando ```ts-jest``` que é uma biblioteca para fazer uma compilação do código typescript para javascript somente para o jest.
 
 * Apos a instalação das dependências execute o comando ```jest --init```. Este comando vai gerar um arquivo de configuração do Jest.
+
+---  
