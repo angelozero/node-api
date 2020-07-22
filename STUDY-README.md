@@ -1,4 +1,7 @@
-> ###Configurando o git
+> ##01 - Configurando o ambiente
+
+
+> ###Configurando o Git
 
 * Configurando atalhos para uso do git ( se caso houver problemas em acessar o visual code através do comando ```git config --global --edit``` acesse este [link](https://stackoverflow.com/questions/53847777/associating-visual-studio-code-with-git-in-mac))
 
@@ -10,6 +13,7 @@
 [alias]
 	log = !git log --pretty=format:'%C(yellow)%h%C(red)%d %C(white)%s - %C(cyan)%cn, %C(green)%cr'
 ```
+
 
 > ###Padronizando as mensagens dos *commits*
 
@@ -44,6 +48,7 @@
     A very short description of the change in one line.
 ```
 
+
 > ###Adicionando TypeScript
 
 * Instalar o [TypeScript](https://www.typescriptlang.org/docs/home.html) ```npm install -D typescript @types/node```. O uso do ```@types/node``` é uma biblioteca com os tipos do node.  
@@ -55,3 +60,10 @@
 *```"target": "es2019"```: versao a ser gerada. Para mais info acesse: [Node.js ES2015 Support](https://node.green/)*
 *```"esModuleInterop": true```: conversao de modulos que usam o commonjs*
 *```"allowJs": true```: para incluir arquivos de configuração se o formato deste arquivo for .js*
+
+
+> ###Padrão de JavaScript e usando ESLint
+
+* Estou seguindo o padrão chamado [JavaScript Standard Style](https://standardjs.com/rules.html)
+
+* Acesse os links para usar o [ESLint](https://eslint.org/docs/user-guide/getting-started) e instalar o [eslint-config-standard-with-typescript](https://www.npmjs.com/package/eslint-config-standard-with-typescript)
