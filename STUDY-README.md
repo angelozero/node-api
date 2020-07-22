@@ -62,10 +62,15 @@
 * Criando e configurando o arquivo ```tsconfig.json```.
 
 *```"outDir": "./dist"```: diretorio aonde sera gerado o codigo em javascript*
+
 *```"module": "commonjs"```: formato de geracao para os browsers*
+
 *```"target": "es2019"```: versao a ser gerada. Para mais info acesse: [Node.js ES2015 Support](https://node.green/)*
+
 *```"esModuleInterop": true```: conversao de modulos que usam o commonjs*
+
 *```"allowJs": true```: para incluir arquivos de configuração se o formato deste arquivo for .js*
+
 
 ---    
 ### Padrão de JavaScript e usando ESLint
