@@ -2,8 +2,9 @@ import { HttpRequest, HttpResponse } from '../protocols/http'
 import { EmptyDataError } from './../errors/empty-data-error'
 import { MissingParamError } from '../errors/missing-param-error'
 import { badRequest } from '../helpers/http-helper'
+import { Controller } from '../protocols/controller'
 
-export class SingUpController {
+export class SingUpController implements Controller {
   handle(httpRequest: HttpRequest): HttpResponse {
     // get all fields from a object
     // if (httpRequest.body) {
