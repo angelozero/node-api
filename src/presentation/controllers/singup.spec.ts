@@ -1,4 +1,4 @@
-import { EmailValidator } from './../protocols/email-validator';
+import { EmailValidator } from './../protocols/email-validator'
 import { SingUpController } from './singup'
 import { MissingParamError } from '../errors/missing-param-error'
 import { EmptyDataError } from './../errors/empty-data-error'
