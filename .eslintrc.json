@@ -8,6 +8,7 @@
     "eol-last": [
       "error",
       "never"
-    ]
+    ],
+    "@typescript-eslint/space-before-function-paren": "off"
   }
 }
