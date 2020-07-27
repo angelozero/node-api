@@ -1,9 +1,10 @@
 {
   "extends": "standard-with-typescript",
   "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "space-before-function-paren": [
-    "never"
-  ]
+    "project": "./tsconfig.json",
+    "rules": {
+      "@typescript-eslint/strict-boolean-expressions": "off",
+      "eol-last": "off"
+    }
+  }
 }
