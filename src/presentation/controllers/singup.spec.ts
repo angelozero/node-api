@@ -1,9 +1,12 @@
-import { EmailValidator } from './../protocols/index-protocols'
+import { EmailValidator } from './../protocols/email-validator'
 import { SingUpController } from './singup'
+import { AddAccountModel, AddAccount } from '../../domain/usecases/add-account'
+import { AccountModel } from '../../domain/models/account-model'
 import { ServerError, EmptyDataError, MissingParamError, InvalidParamError } from './../errors/index-error'
 
 interface SingUpTypes {
   emailValidatorStub: EmailValidatorStub
+  addAccountStub: AddAccountStub
   singUpController: SingUpController
 }
 
@@ -13,10 +16,24 @@ class EmailValidatorStub implements EmailValidator {
   }
 }
 
+class AddAccountStub implements AddAccount {
+  add(account: AddAccountModel): AccountModel {
+    const fakeAccount = {
+      id: 'valid_id',
+      name: 'any_name',
+      email: 'any_email@email.com',
+      password: 'any_password'
+    }
+    return fakeAccount
+  }
+}
+
 const singUpMock = (): SingUpTypes => {
   const emailValidatorStub = new EmailValidatorStub()
-  const singUpController = new SingUpController(emailValidatorStub)
-  return { singUpController, emailValidatorStub }
+  const addAccountStub = new AddAccountStub()
+  const singUpController = new SingUpController(emailValidatorStub, addAccountStub)
+
+  return { emailValidatorStub, addAccountStub, singUpController }
 }
 
 const emailValidatorServiceMock = (): EmailValidator => {
@@ -26,6 +43,21 @@ const emailValidatorServiceMock = (): EmailValidator => {
     }
   }
   return new EmailValidatorStub()
+}
+
+const addAccountServiceMock = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add(account: AddAccountModel): AccountModel {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password'
+      }
+      return fakeAccount
+    }
+  }
+  return new AddAccountStub()
 }
 
 describe('SingUp Controller', () => {
@@ -143,7 +175,7 @@ describe('SingUp Controller', () => {
   })
 
   test('Should return 500 if email validator throws an exception', () => {
-    const singUpController = new SingUpController(emailValidatorServiceMock())
+    const singUpController = new SingUpController(emailValidatorServiceMock(), addAccountServiceMock())
 
     const httpRequest = {
       body: {
@@ -156,5 +188,25 @@ describe('SingUp Controller', () => {
     const httpResponse = singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError('error_email_validator_service'))
+  })
+
+  test('Should call add account with valid values', () => {
+    const singUp = singUpMock()
+    jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
+    const addAcountSpy = jest.spyOn(singUp.addAccountStub, 'add')
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    singUp.singUpController.handle(httpRequest)
+    expect(addAcountSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@email.com',
+      password: 'any_password'
+    })
   })
 })
