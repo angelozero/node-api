@@ -111,6 +111,22 @@ describe('SingUp Controller', () => {
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 
+  test('Should return 400 if the password is not equals the password confirmation', () => {
+    const singUp = singUpMock()
+    jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password_error'
+      }
+    }
+    const httpResponse = singUp.singUpController.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new InvalidParamError('password and password confirmation are not the same'))
+  })
+
   test('Should call once the email validator function', () => {
     const singUp = singUpMock()
     const calledOnce = jest.spyOn(singUp.emailValidatorStub, 'isValid')
