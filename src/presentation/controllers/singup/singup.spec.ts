@@ -15,7 +15,7 @@ class EmailValidatorStub implements EmailValidator {
 }
 
 class AddAccountStub implements AddAccount {
-  add(account: AddAccountModel): AccountModel {
+  async add(account: AddAccountModel): Promise<AccountModel> {
     const fakeAccount = {
       id: 'valid_id',
       name: 'any_name',
@@ -45,21 +45,21 @@ const emailValidatorServiceMock = (): EmailValidator => {
 
 const addAccountServiceMock = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    add(account: AddAccountModel): AccountModel {
+    async add(account: AddAccountModel): Promise<AccountModel> {
       const fakeAccount = {
         id: 'valid_id',
         name: 'any_name',
         email: 'any_email@email.com',
         password: 'any_password'
       }
-      return fakeAccount
+      return await new Promise(resolve => resolve(fakeAccount))
     }
   }
   return new AddAccountStub()
 }
 
 describe('SingUp Controller', () => {
-  test('Should return 400 if no name is provided', () => {
+  test('Should return 400 if no name is provided', async () => {
     const singUp = singUpMock()
     const httpRequest = {
       body: {
@@ -68,12 +68,12 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
-  test('Should return 400 if no email is provided', () => {
+  test('Should return 400 if no email is provided', async () => {
     const singUp = singUpMock()
     const httpRequest = {
       body: {
@@ -82,12 +82,12 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 
-  test('Should return 400 if no password is provided', () => {
+  test('Should return 400 if no password is provided', async () => {
     const singUp = singUpMock()
     const httpRequest = {
       body: {
@@ -96,12 +96,12 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should return 400 if no passwordConfirmation is provided', () => {
+  test('Should return 400 if no passwordConfirmation is provided', async () => {
     const singUp = singUpMock()
     const httpRequest = {
       body: {
@@ -110,22 +110,22 @@ describe('SingUp Controller', () => {
         email: 'any_email@email.com'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
   })
 
-  test('Should return 400 if no data is provided', () => {
+  test('Should return 400 if no data is provided', async () => {
     const singUp = singUpMock()
     const httpRequest = {
       body: {}
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new EmptyDataError('Error to receive sing up data'))
   })
 
-  test('Should return 400 if an invalid email is provided', () => {
+  test('Should return 400 if an invalid email is provided', async () => {
     const singUp = singUpMock()
     jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpRequest = {
@@ -136,12 +136,12 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 
-  test('Should return 400 if the password is not equals the password confirmation', () => {
+  test('Should return 400 if the password is not equals the password confirmation', async () => {
     const singUp = singUpMock()
     jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
     const httpRequest = {
@@ -152,12 +152,12 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password_error'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('password and password confirmation are not the same'))
   })
 
-  test('Should call once the email validator function', () => {
+  test('Should call once the email validator function', async () => {
     const singUp = singUpMock()
     const calledOnce = jest.spyOn(singUp.emailValidatorStub, 'isValid')
     const httpRequest = {
@@ -168,11 +168,11 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    singUp.singUpController.handle(httpRequest)
+    await singUp.singUpController.handle(httpRequest)
     expect(calledOnce).toBeTruthy()
   })
 
-  test('Should return 500 if email validator throws an exception', () => {
+  test('Should return 500 if email validator throws an exception', async () => {
     const singUpController = new SingUpController(emailValidatorServiceMock(), addAccountServiceMock())
 
     const httpRequest = {
@@ -183,12 +183,12 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUpController.handle(httpRequest)
+    const httpResponse = await singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError('Error: error_email_validator_service'))
   })
 
-  test('Should call add account with valid values', () => {
+  test('Should call add account with valid values', async () => {
     const singUp = singUpMock()
     jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
     const addAcountSpy = jest.spyOn(singUp.addAccountStub, 'add')
@@ -200,7 +200,7 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    singUp.singUpController.handle(httpRequest)
+    await singUp.singUpController.handle(httpRequest)
     expect(addAcountSpy).toHaveBeenCalledWith({
       name: 'any_name',
       email: 'any_email@email.com',
@@ -208,11 +208,11 @@ describe('SingUp Controller', () => {
     })
   })
 
-  test('Should return 500 if was not possible add a new account', () => {
+  test('Should return 500 if was not possible add a new account', async () => {
     const singUp = singUpMock()
     jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
-    jest.spyOn(singUp.addAccountStub, 'add').mockImplementationOnce(() => {
-      throw new Error('error_add_account_service')
+    jest.spyOn(singUp.addAccountStub, 'add').mockImplementationOnce(async () => {
+      return await new Promise((resolve, reject) => reject(new Error('error_add_account_service')))
     })
     const httpRequest = {
       body: {
@@ -222,20 +222,20 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError('Error: error_add_account_service'))
   })
 
-  test('Should return 200 if valid data is provided', () => {
+  test('Should return 200 if valid data is provided', async () => {
     const singUp = singUpMock()
     jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
-    jest.spyOn(singUp.addAccountStub, 'add').mockReturnValueOnce({
+    jest.spyOn(singUp.addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => resolve({
       id: 'any_id_123',
       name: 'any_name',
       email: 'any_email@email.com',
       password: 'any_password'
-    })
+    })))
 
     const httpRequest = {
       body: {
@@ -245,7 +245,7 @@ describe('SingUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = singUp.singUpController.handle(httpRequest)
+    const httpResponse = await singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
     expect(httpResponse.body).toEqual({
       id: 'any_id_123',

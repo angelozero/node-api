@@ -11,7 +11,7 @@ export class SingUpController implements Controller {
     this.addAccount = addAccount
   }
 
-  handle(httpRequest: HttpRequest): HttpResponse {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     // get all fields from a object
     // if (httpRequest.body) {
     //   const requiredFields = Object.keys(httpRequest.body)
@@ -38,7 +38,7 @@ export class SingUpController implements Controller {
       if (!this.emailValidator.isValid(httpRequest.body.email)) {
         return badRequest(new InvalidParamError('email'))
       }
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         name: httpRequest.body.name,
         email: httpRequest.body.email,
         password: httpRequest.body.password
