@@ -226,4 +226,32 @@ describe('SingUp Controller', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError('Error: error_add_account_service'))
   })
+
+  test('Should return 200 if valid data is provided', () => {
+    const singUp = singUpMock()
+    jest.spyOn(singUp.emailValidatorStub, 'isValid').mockReturnValueOnce(true)
+    jest.spyOn(singUp.addAccountStub, 'add').mockReturnValueOnce({
+      id: 'any_id_123',
+      name: 'any_name',
+      email: 'any_email@email.com',
+      password: 'any_password'
+    })
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = singUp.singUpController.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id_123',
+      name: 'any_name',
+      email: 'any_email@email.com',
+      password: 'any_password'
+    })
+  })
 })

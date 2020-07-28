@@ -1,5 +1,5 @@
 import { ServerError, EmptyDataError, MissingParamError, InvalidParamError } from '../../errors/index-error'
-import { badRequest, internalServerError } from '../../helpers/index-helpers'
+import { badRequest, internalServerError, successRequest } from '../../helpers/index-helpers'
 import { HttpRequest, HttpResponse, Controller, EmailValidator, AddAccount } from './singup-protocols'
 
 export class SingUpController implements Controller {
@@ -38,11 +38,14 @@ export class SingUpController implements Controller {
       if (!this.emailValidator.isValid(httpRequest.body.email)) {
         return badRequest(new InvalidParamError('email'))
       }
-      this.addAccount.add({
+      const account = this.addAccount.add({
         name: httpRequest.body.name,
         email: httpRequest.body.email,
         password: httpRequest.body.password
       })
+
+      return successRequest(account)
+
     } catch (error) {
       return internalServerError(new ServerError(error))
     }
