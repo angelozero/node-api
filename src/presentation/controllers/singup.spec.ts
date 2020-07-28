@@ -19,6 +19,15 @@ const singUpMock = (): SingUpTypes => {
   return { singUpController, emailValidatorStub }
 }
 
+const emailValidatorServiceMock = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email: string): boolean {
+      throw new Error('error_email_validator_service')
+    }
+  }
+  return new EmailValidatorStub()
+}
+
 describe('SingUp Controller', () => {
   test('Should return 400 if no name is provided', () => {
     const singUp = singUpMock()
@@ -118,13 +127,7 @@ describe('SingUp Controller', () => {
   })
 
   test('Should return 500 if email validator throws an exception', () => {
-    class EmailValidatorStub implements EmailValidator {
-      isValid(email: string): boolean {
-        throw new Error('error_email_validator_service')
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub()
-    const singUpController = new SingUpController(emailValidatorStub)
+    const singUpController = new SingUpController(emailValidatorServiceMock())
 
     const httpRequest = {
       body: {
