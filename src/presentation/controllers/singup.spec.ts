@@ -1,8 +1,6 @@
 import { EmailValidator } from './../protocols/email-validator'
 import { SingUpController } from './singup'
-import { MissingParamError } from '../errors/missing-param-error'
-import { EmptyDataError } from './../errors/empty-data-error'
-import { InvalidParamError } from './../errors/invalid-param-error'
+import { ServerError, EmptyDataError, MissingParamError, InvalidParamError } from './../errors/index-error'
 
 interface SingUpTypes {
   emailValidatorStub: EmailValidatorStub
@@ -77,6 +75,7 @@ describe('SingUp Controller', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
   })
+
   test('Should return 400 if no data is provided', () => {
     const singUp = singUpMock()
     const httpRequest = {
@@ -101,5 +100,42 @@ describe('SingUp Controller', () => {
     const httpResponse = singUp.singUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+  })
+
+  test('Should call once the email validator function', () => {
+    const singUp = singUpMock()
+    const calledOnce = jest.spyOn(singUp.emailValidatorStub, 'isValid')
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    singUp.singUpController.handle(httpRequest)
+    expect(calledOnce).toBeTruthy()
+  })
+
+  test('Should return 500 if email validator throws an exception', () => {
+    class EmailValidatorStub implements EmailValidator {
+      isValid(email: string): boolean {
+        throw new Error('error_email_validator_service')
+      }
+    }
+    const emailValidatorStub = new EmailValidatorStub()
+    const singUpController = new SingUpController(emailValidatorStub)
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = singUpController.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError('error_email_validator_service'))
   })
 })

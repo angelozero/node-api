@@ -1,10 +1,10 @@
-import { EmailValidator } from './../protocols/email-validator';
+import { ServerError, EmptyDataError, MissingParamError, InvalidParamError } from './../errors/index-error'
+
+import { internalServerError } from './../helpers/http-helper'
+import { EmailValidator } from './../protocols/email-validator'
 import { HttpRequest, HttpResponse } from '../protocols/http'
-import { EmptyDataError } from './../errors/empty-data-error'
-import { MissingParamError } from '../errors/missing-param-error'
 import { badRequest } from '../helpers/http-helper'
 import { Controller } from '../protocols/controller'
-import { InvalidParamError } from '../errors/invalid-param-error';
 
 export class SingUpController implements Controller {
   private readonly emailValidator: EmailValidator
@@ -31,8 +31,12 @@ export class SingUpController implements Controller {
         return badRequest(new MissingParamError(field))
       }
     }
-    if (!this.emailValidator.isValid(httpRequest.body.email)) {
-      return badRequest(new InvalidParamError('email'))
+    try {
+      if (!this.emailValidator.isValid(httpRequest.body.email)) {
+        return badRequest(new InvalidParamError('email'))
+      }
+    } catch (error) {
+      return internalServerError(new ServerError(error.message))
     }
   }
 }
