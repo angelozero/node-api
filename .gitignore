@@ -108,3 +108,6 @@ dist
 
 # Node Modules folder
 node_modules
+
+# Coverage folder
+coverage

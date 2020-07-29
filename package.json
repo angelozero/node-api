@@ -4,8 +4,9 @@
   "description": "> ## Criando uma API em NodeJs",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:staged": "jest --passWithNoTests"
+    "test": "jest --coverage",
+    "test:staged": "jest --passWithNoTests",
+    "test:ci": "npm test -- --coverage"
   },
   "repository": {
     "type": "git",
