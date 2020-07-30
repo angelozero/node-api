@@ -1,6 +1,6 @@
 > ## APIs construídas no treinamento
 
-1. [Cadastro](./requirements/signup.md)
+1. [Cadastro](https://github.com/angelozero/node-api/blob/master/z-notes/04-singup-class.md)
 2. [Login](./requirements/login.md)
 3. [Criar enquete](./requirements/add-survey.md)
 4. [Listar enquetes](./requirements/load-surveys.md)
