@@ -75,4 +75,18 @@ describe('DbAddAccount Usecase', () => {
       password: 'encrypted_password'
     })
   })
+
+  test('Should throw excpetion if AddAccountRepository throws exception', async () => {
+    const errorMessage = 'error_addAccountRepository_exception'
+    jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error(errorMessage))))
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+
+    const promise = dbAddAccount.add(accountData)
+    await expect(promise).rejects.toThrow('error_addAccountRepository_exception')
+  })
 })
