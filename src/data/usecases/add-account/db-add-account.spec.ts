@@ -13,7 +13,7 @@ class AddAccountRepositoryStub implements AddAccountRepository {
       id: 'valid_id',
       name: 'valid_name',
       email: 'valid_email',
-      password: 'hashed_password'
+      password: 'encrypted_hashed_password'
     }
     return await new Promise(resolve => resolve(fakeAccount))
   }
@@ -88,5 +88,23 @@ describe('DbAddAccount Usecase', () => {
 
     const promise = dbAddAccount.add(accountData)
     await expect(promise).rejects.toThrow('error_addAccountRepository_exception')
+  })
+
+  test('Should return a saved AccountModel with success', async () => {
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+
+    const account = await dbAddAccount.add(accountData)
+
+    expect(account).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'encrypted_hashed_password'
+    })
   })
 })
