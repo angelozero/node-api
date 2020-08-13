@@ -1,5 +1,5 @@
 # 05 - Data Layer ( Camada Data )
-###### SingUp, EmailValidator, HttpRequest, HttpResponse e Controller
+###### Classe, Classe, ...
 
 ---    
 
